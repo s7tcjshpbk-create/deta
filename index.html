@@ -1,8 +1,8 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Запрошення на побачення 💌</title>
 
 <style>
@@ -10,7 +10,7 @@ DOCTYPE html>
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 body {
@@ -25,7 +25,7 @@ body {
 
 .card {
   background: white;
-  padding: 28px 20px;
+  padding: 28px 22px;
   border-radius: 20px;
   box-shadow: 0 10px 25px #0002;
   max-width: 420px;
@@ -50,7 +50,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 15px;
   min-height: 100px;
 }
 
@@ -66,9 +66,9 @@ button {
 .btn-yes {
   background: #28a745;
   color: white;
-  transition: transform .2s;
   position: relative;
   z-index: 2;
+  transition: transform .2s;
 }
 
 .btn-no {
@@ -78,15 +78,16 @@ button {
   left: 58%;
   top: 25px;
   white-space: nowrap;
-  transition: left .15s, top .15s, transform .15s;
   z-index: 3;
+  transition: left .15s, top .15s, transform .15s;
 }
 
 #funnyMessage {
-  min-height: 55px;
+  min-height: 52px;
   color: #d63384;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 .form-group {
@@ -98,6 +99,7 @@ label {
   display: block;
   margin-bottom: 6px;
   font-weight: bold;
+  color: #333;
 }
 
 select, input {
@@ -112,10 +114,10 @@ select, input {
   background: #d63384;
   color: white;
   width: 100%;
-}
-
-.btn-submit:disabled {
-  opacity: .6;
+  margin-top: 5px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 #step-2 {
@@ -126,6 +128,7 @@ select, input {
   margin-top: 15px;
   font-size: 15px;
   overflow-wrap: anywhere;
+  color: #d63384;
 }
 </style>
 </head>
@@ -133,7 +136,7 @@ select, input {
 <body>
 <div class="card">
 
-  <section id="step-1">
+  <div id="step-1">
     <h1>Підемо на побачення? 🥺</h1>
     <p>Я дуууже хочу провести з тобою час!</p>
 
@@ -142,12 +145,14 @@ select, input {
       <button class="btn-no" id="btnNo">Ні 😢</button>
     </div>
 
-    <p id="funnyMessage">Обирай відповідь уважно 👀</p>
-  </section>
+    <p id="funnyMessage" aria-live="polite">
+      Обирай відповідь дуже уважно 👀
+    </p>
+  </div>
 
-  <section id="step-2">
+  <div id="step-2">
     <h1>Урааа! 🎉</h1>
-    <p>Ну що, додо, куди й коли? 🦤</p>
+    <p>Ну що, додо, куди й коли вирушаємо? 🦤</p>
 
     <div class="form-group">
       <label for="placeSelect">Куди підемо?</label>
@@ -162,8 +167,7 @@ select, input {
 
     <div class="form-group" id="customGroup" style="display:none">
       <label for="customPlace">Твоя пропозиція</label>
-      <input id="customPlace" maxlength="300"
-             placeholder="Напиши, куди хочеш піти">
+      <input id="customPlace" type="text" placeholder="Напиши, куди хочеш піти">
     </div>
 
     <div class="form-group">
@@ -171,142 +175,131 @@ select, input {
       <input type="datetime-local" id="dateTime" required>
     </div>
 
-    <button class="btn-submit" id="sendBtn">
+    <a id="sendBtn" class="btn-submit" href="#" target="_blank">
       Підтвердити побачення 💌
-    </button>
+    </a>
 
     <p id="status" aria-live="polite"></p>
-  </section>
+  </div>
 
 </div>
 
 <script>
-// Після публікації Cloudflare Worker встав сюди його адресу.
-const SERVER_URL = "ВСТАВ_АДРЕСУ_CLOUDFLARE_WORKER";
+  const BOT_USERNAME = 'dodo_dodo05n_bot';
 
-const phrases = [
-  "Ти серйозно? Я навіть сайт для цього написав! 😭",
-  "Додо, ти зараз серйозно натискаєш «Ні»? 🦤",
-  "Може, окуляри потрібні? Там же «Так»! 👀",
-  "Кнопка «Ні» йде у відпустку 😂",
-  "Я витратив час на сайт, а ти так зі мною?!",
-  "Виявлено критичний рівень додо 🦤",
-  "Навіть кнопка не хоче казати «Ні» 🤣",
-  "Додо.exe перестав відповідати...",
-  "Я це запам'ятаю. Особливо додо запам'ятаю 😭",
-  "Всесвіт натякає тобі натиснути «Так» 🌍",
-  "Ти серйозно? А хто тоді їстиме зі мною? 😭"
-];
+  const phrases = [
+    "Ти серйозно? Я навіть сайт для цього написав! 😭",
+    "Додо, ти зараз серйозно натискаєш «Ні»? 🦤",
+    "Кнопка на твоєму боці, але я на крок попереду 😈",
+    "Може, окуляри потрібні? Там же «Так»! 👀",
+    "Я витратив час на сайт, а ти так зі мною?!",
+    "Увага! Виявлено критичний рівень додо 🦤",
+    "Кнопка «Ні» йде у відпустку 😂",
+    "Твій вибір прийнято. Жартую, лови кнопку!",
+    "Навіть кнопка не хоче казати «Ні» 🤣",
+    "Додо.exe перестав відповідати...",
+    "Я це запам'ятаю. Особливо додо запам'ятаю 😭",
+    "Всесвіт натякає тобі натиснути «Так» 🌍"
+  ];
 
-let attempts = 0;
-let yesScale = 1;
-let noScale = 1;
+  let attempts = 0;
+  let yesScale = 1;
+  let noScale = 1;
 
-const btnNo = document.getElementById("btnNo");
-const btnYes = document.getElementById("btnYes");
-const container = document.getElementById("btnContainer");
+  const btnNo = document.getElementById("btnNo");
+  const btnYes = document.getElementById("btnYes");
+  const container = document.getElementById("btnContainer");
 
-function moveNoButton(event) {
-  if (event) event.preventDefault();
+  function moveNoButton(event) {
+    if (event) event.preventDefault();
 
-  attempts++;
+    attempts++;
 
-  document.getElementById("funnyMessage").textContent =
-    phrases[(attempts - 1) % phrases.length];
+    document.getElementById("funnyMessage").textContent =
+      phrases[(attempts - 1) % phrases.length];
 
-  noScale = Math.max(0.35, noScale - 0.07);
-  btnNo.style.transform = `scale(${noScale})`;
+    noScale = Math.max(0.35, noScale - 0.07);
+    btnNo.style.transform = `scale(${noScale})`;
 
-  yesScale = Math.min(1.65, yesScale + 0.045);
-  btnYes.style.transform = `scale(${yesScale})`;
+    yesScale = Math.min(1.65, yesScale + 0.045);
+    btnYes.style.transform = `scale(${yesScale})`;
 
-  const maxX = Math.max(0, container.clientWidth - btnNo.offsetWidth);
-  const maxY = Math.max(0, container.clientHeight - btnNo.offsetHeight);
+    const maxX = Math.max(0, container.clientWidth - btnNo.offsetWidth);
+    const maxY = Math.max(0, container.clientHeight - btnNo.offsetHeight);
 
-  btnNo.style.left = Math.random() * maxX + "px";
-  btnNo.style.top = Math.random() * maxY + "px";
-}
-
-btnNo.addEventListener("pointerenter", moveNoButton);
-btnNo.addEventListener("touchstart", moveNoButton, { passive: false });
-
-btnYes.addEventListener("click", () => {
-  document.getElementById("step-1").style.display = "none";
-  document.getElementById("step-2").style.display = "block";
-});
-
-document.getElementById("placeSelect").addEventListener("change", e => {
-  document.getElementById("customGroup").style.display =
-    e.target.value === "custom" ? "block" : "none";
-});
-
-document.getElementById("sendBtn").addEventListener("click", async () => {
-  const select = document.getElementById("placeSelect");
-  const custom = document.getElementById("customPlace").value.trim();
-  const dateTime = document.getElementById("dateTime").value;
-  const status = document.getElementById("status");
-  const sendBtn = document.getElementById("sendBtn");
-
-  const place = select.value === "custom" ? custom : select.value;
-
-  if (!place || !dateTime) {
-    status.textContent = "Обери місце, дату та час 🥺";
-    return;
+    btnNo.style.left = Math.random() * maxX + "px";
+    btnNo.style.top = Math.random() * maxY + "px";
   }
 
-  if (select.value === "custom" && !custom) {
-    status.textContent = "Напиши свою пропозицію 💡";
-    return;
-  }
-
-  if (new Date(dateTime).getTime() < Date.now()) {
-    status.textContent = "Обери дату в майбутньому 😅";
-    return;
-  }
-
-  const formattedDate = new Date(dateTime).toLocaleString("uk-UA", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
+  btnNo.addEventListener("pointerenter", moveNoButton);
+  btnNo.addEventListener("touchstart", moveNoButton, {
+    passive: false
   });
 
-  if (SERVER_URL.startsWith("ВСТАВ_")) {
-    status.textContent = "Спочатку налаштуй адресу Telegram-сервера.";
-    return;
-  }
+  btnYes.addEventListener("click", () => {
+    document.getElementById("step-1").style.display = "none";
+    document.getElementById("step-2").style.display = "block";
+  });
 
-  sendBtn.disabled = true;
-  status.textContent = "Надсилаємо повідомлення... 💌";
+  document.getElementById("placeSelect").addEventListener("change", e => {
+    document.getElementById("customGroup").style.display =
+      e.target.value === "custom" ? "block" : "none";
+  });
 
-  try {
-    const response = await fetch(SERVER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        place,
-        dateTime: formattedDate
-      })
-    });
+  document.getElementById("sendBtn").addEventListener("click", (e) => {
+    const select = document.getElementById("placeSelect");
+    const custom = document.getElementById("customPlace").value.trim();
+    const dateTime = document.getElementById("dateTime").value;
+    const status = document.getElementById("status");
 
-    const result = await response.json();
+    const place = select.value === "custom" ? custom : select.value;
 
-    if (!response.ok || !result.ok) {
-      throw new Error(result.error || "Помилка надсилання");
+    if (!place || !dateTime) {
+      e.preventDefault();
+      status.textContent = "Обери місце та дату з часом 🥺";
+      return;
     }
 
-    status.textContent =
-      "Урааа! Повідомлення відправлено! 💗🦤";
-    sendBtn.textContent = "Відправлено 💌";
-  } catch (error) {
-    console.error(error);
-    status.textContent =
-      "Не вдалося надіслати 😢 Перевір налаштування сервера.";
-    sendBtn.disabled = false;
-  }
-});
+    if (select.value === "custom" && !custom) {
+      e.preventDefault();
+      status.textContent = "Напиши свою пропозицію 💡";
+      return;
+    }
+
+    const dateObj = new Date(dateTime);
+
+    if (Number.isNaN(dateObj.getTime())) {
+      e.preventDefault();
+      status.textContent = "Перевір правильність дати та часу!";
+      return;
+    }
+
+    if (dateObj.getTime() < Date.now()) {
+      e.preventDefault();
+      status.textContent = "Ця дата вже в минулому 😅 Обери майбутню!";
+      return;
+    }
+
+    const formattedDate = dateObj.toLocaleString("uk-UA", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const messageText = 
+      `💌 НОВА ВІДПОВІДЬ НА ЗАПРОШЕННЯ!\n\n` +
+      `🎉 Погодження на побачення!\n` +
+      `📍 Місце: ${place}\n` +
+      `📅 Дата та час: ${formattedDate}`;
+
+    // Формуємо посилання на Telegram з готовим текстом
+    const telegramUrl = `https://t.me/${BOT_USERNAME}?text=` + encodeURIComponent(messageText);
+    document.getElementById("sendBtn").href = telegramUrl;
+    
+    status.textContent = "Відкриваємо Telegram... Натисніть «Надіслати» 💌";
+  });
 </script>
 </body>
 </html>
-```
