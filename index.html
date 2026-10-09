@@ -1,272 +1,313 @@
-   .btn-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      min-height: 120px;
-    }
+```html
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Запрошення на побачення 💌</title>
 
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.2s;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+}
 
-    .btn-yes {
-      background-color: #28a745;
-      color: white;
-      z-index: 2;
-    }
+body {
+  background: linear-gradient(135deg, #ff9a9e, #fecfef);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
 
-    .btn-no {
-      background-color: #dc3545;
-      color: white;
-    }
+.card {
+  background: white;
+  padding: 28px 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px #0002;
+  max-width: 420px;
+  width: 100%;
+  overflow: hidden;
+}
 
-    .btn-submit {
-      background-color: #d63384;
-      color: white;
-      width: 100%;
-      margin-top: 15px;
-    }
+h1 {
+  color: #d63384;
+  margin-bottom: 15px;
+  font-size: 25px;
+}
 
-    .btn-submit:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
+p {
+  color: #555;
+  font-size: 17px;
+  margin-bottom: 20px;
+}
 
-    .form-group {
-      margin-bottom: 15px;
-      text-align: left;
-    }
+.btn-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  min-height: 100px;
+}
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #333;
-      font-weight: bold;
-    }
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
 
-    select, input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
+.btn-yes {
+  background: #28a745;
+  color: white;
+  transition: transform .2s;
+  position: relative;
+  z-index: 2;
+}
 
-    #step-2 {
-      display: none;
-    }
+.btn-no {
+  background: #dc3545;
+  color: white;
+  position: absolute;
+  left: 58%;
+  top: 25px;
+  white-space: nowrap;
+  transition: left .15s, top .15s, transform .15s;
+  z-index: 3;
+}
 
-    #result {
-      margin-top: 15px;
-      color: #d63384;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-  </style>
+#funnyMessage {
+  min-height: 55px;
+  color: #d63384;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+select, input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.btn-submit {
+  background: #d63384;
+  color: white;
+  width: 100%;
+}
+
+.btn-submit:disabled {
+  opacity: .6;
+}
+
+#step-2 {
+  display: none;
+}
+
+#status {
+  margin-top: 15px;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+</style>
 </head>
 
 <body>
-  <div class="card">
+<div class="card">
 
-    <div id="step-1">
-      <h1>Підемо на побачення? 🥺</h1>
-      <p>Я дуууже хочу провести з тобою час!</p>
+  <section id="step-1">
+    <h1>Підемо на побачення? 🥺</h1>
+    <p>Я дуууже хочу провести з тобою час!</p>
 
-      <div class="btn-container">
-        <button class="btn-yes" id="btnYes" onclick="goToStep2()">
-          Так! 🥰
-        </button>
-
-        <button class="btn-no" id="btnNo">
-          Ні 😢
-        </button>
-      </div>
+    <div class="btn-container" id="btnContainer">
+      <button class="btn-yes" id="btnYes">Так! 🥰</button>
+      <button class="btn-no" id="btnNo">Ні 😢</button>
     </div>
 
-    <div id="step-2">
-      <h1>Ура! 🎉 Куди та коли?</h1>
+    <p id="funnyMessage">Обирай відповідь уважно 👀</p>
+  </section>
 
-      <div class="form-group">
-        <label for="placeSelect">Оберіть місце:</label>
-        <select id="placeSelect" onchange="toggleCustomPlace(this.value)">
-          <option value="Ресторан / Кав'ярня">☕ Ресторан / Кав'ярня</option>
-          <option value="Прогулянка в парку">🌳 Прогулянка в парку</option>
-          <option value="Кінотеатр">🎬 Кінотеатр</option>
-          <option value="Боулінг / Більярд">🎱 Боулінг / Більярд</option>
-          <option value="custom">✏️ Власне місце...</option>
-        </select>
-      </div>
+  <section id="step-2">
+    <h1>Урааа! 🎉</h1>
+    <p>Ну що, додо, куди й коли? 🦤</p>
 
-      <div class="form-group" id="customPlaceInput" style="display: none;">
-        <label for="customPlace">Введіть свій варіант:</label>
-        <input
-          type="text"
-          id="customPlace"
-          maxlength="200"
-          placeholder="Наприклад: Пікнік біля річки"
-        >
-      </div>
-
-      <div class="form-group">
-        <label for="dateTime">Оберіть дату та час:</label>
-        <input type="datetime-local" id="dateTime">
-      </div>
-
-      <button class="btn-submit" id="submitBtn" onclick="sendData()">
-        Відправити 🚀
-      </button>
-
-      <div id="result" role="status"></div>
+    <div class="form-group">
+      <label for="placeSelect">Куди підемо?</label>
+      <select id="placeSelect">
+        <option value="Прогулянка">🌳 Прогулянка</option>
+        <option value="Більярд">🎱 Більярд</option>
+        <option value="Кафе">☕ Кафе</option>
+        <option value="Ресторан">🍝 Ресторан</option>
+        <option value="custom">💡 Моя пропозиція</option>
+      </select>
     </div>
 
-  </div>
+    <div class="form-group" id="customGroup" style="display:none">
+      <label for="customPlace">Твоя пропозиція</label>
+      <input id="customPlace" maxlength="300"
+             placeholder="Напиши, куди хочеш піти">
+    </div>
 
-  <script>
-    // Налаштування Telegram
-    const TELEGRAM_BOT_TOKEN = '8908941684:AAGP6pLR7T2QkGYy0gd1jn6iAkiQdRDkXe0';
-    const TELEGRAM_CHAT_ID = '8416117144';
+    <div class="form-group">
+      <label for="dateTime">Дата та час</label>
+      <input type="datetime-local" id="dateTime" required>
+    </div>
 
-    // Кумедні фрази про додо
-    const phrases = [
-      "Ти що, додо? 🦤",
-      "Та ти що, я ж спеціально для цього сайт писав!",
-      "Додо, кнопка 'Ні' тут зламалася, тисни 'Так'!",
-      "Ти що, реально додо? Натискай 'Так'! 😜",
-      "Ні-ні-ні, цей варіант не приймається! 🚫",
-      "Я буду збільшувати кнопку 'Так', поки ти не натиснеш!",
-      "Ну ти й додо, кнопка 'Так' вже на пів екрану!"
-    ];
+    <button class="btn-submit" id="sendBtn">
+      Підтвердити побачення 💌
+    </button>
 
-    let phraseIndex = 0;
-    let yesScale = 1;
+    <p id="status" aria-live="polite"></p>
+  </section>
 
-    const btnNo = document.getElementById('btnNo');
-    const btnYes = document.getElementById('btnYes');
-    const submitBtn = document.getElementById('submitBtn');
-    const result = document.getElementById('result');
+</div>
 
-    function moveNoButton() {
-      phraseIndex = (phraseIndex + 1) % phrases.length;
-      btnNo.innerText = phrases[phraseIndex];
+<script>
+// Після публікації Cloudflare Worker встав сюди його адресу.
+const SERVER_URL = "ВСТАВ_АДРЕСУ_CLOUDFLARE_WORKER";
 
-      // Збільшуємо кнопку "Так" з кожним натисканням/наведенням на "Ні"
-      yesScale += 0.2;
-      if (yesScale > 2.5) yesScale = 2.5; // Щоб не розросталося занадто сильно
-      btnYes.style.transform = `scale(${yesScale})`;
-    }
+const phrases = [
+  "Ти серйозно? Я навіть сайт для цього написав! 😭",
+  "Додо, ти зараз серйозно натискаєш «Ні»? 🦤",
+  "Може, окуляри потрібні? Там же «Так»! 👀",
+  "Кнопка «Ні» йде у відпустку 😂",
+  "Я витратив час на сайт, а ти так зі мною?!",
+  "Виявлено критичний рівень додо 🦤",
+  "Навіть кнопка не хоче казати «Ні» 🤣",
+  "Додо.exe перестав відповідати...",
+  "Я це запам'ятаю. Особливо додо запам'ятаю 😭",
+  "Всесвіт натякає тобі натиснути «Так» 🌍",
+  "Ти серйозно? А хто тоді їстиме зі мною? 😭"
+];
 
-    // Події для спрацьовування кумедної анімації
-    btnNo.addEventListener('mouseenter', moveNoButton);
-    btnNo.addEventListener('click', (e) => {
-      e.preventDefault();
-      moveNoButton();
+let attempts = 0;
+let yesScale = 1;
+let noScale = 1;
+
+const btnNo = document.getElementById("btnNo");
+const btnYes = document.getElementById("btnYes");
+const container = document.getElementById("btnContainer");
+
+function moveNoButton(event) {
+  if (event) event.preventDefault();
+
+  attempts++;
+
+  document.getElementById("funnyMessage").textContent =
+    phrases[(attempts - 1) % phrases.length];
+
+  noScale = Math.max(0.35, noScale - 0.07);
+  btnNo.style.transform = `scale(${noScale})`;
+
+  yesScale = Math.min(1.65, yesScale + 0.045);
+  btnYes.style.transform = `scale(${yesScale})`;
+
+  const maxX = Math.max(0, container.clientWidth - btnNo.offsetWidth);
+  const maxY = Math.max(0, container.clientHeight - btnNo.offsetHeight);
+
+  btnNo.style.left = Math.random() * maxX + "px";
+  btnNo.style.top = Math.random() * maxY + "px";
+}
+
+btnNo.addEventListener("pointerenter", moveNoButton);
+btnNo.addEventListener("touchstart", moveNoButton, { passive: false });
+
+btnYes.addEventListener("click", () => {
+  document.getElementById("step-1").style.display = "none";
+  document.getElementById("step-2").style.display = "block";
+});
+
+document.getElementById("placeSelect").addEventListener("change", e => {
+  document.getElementById("customGroup").style.display =
+    e.target.value === "custom" ? "block" : "none";
+});
+
+document.getElementById("sendBtn").addEventListener("click", async () => {
+  const select = document.getElementById("placeSelect");
+  const custom = document.getElementById("customPlace").value.trim();
+  const dateTime = document.getElementById("dateTime").value;
+  const status = document.getElementById("status");
+  const sendBtn = document.getElementById("sendBtn");
+
+  const place = select.value === "custom" ? custom : select.value;
+
+  if (!place || !dateTime) {
+    status.textContent = "Обери місце, дату та час 🥺";
+    return;
+  }
+
+  if (select.value === "custom" && !custom) {
+    status.textContent = "Напиши свою пропозицію 💡";
+    return;
+  }
+
+  if (new Date(dateTime).getTime() < Date.now()) {
+    status.textContent = "Обери дату в майбутньому 😅";
+    return;
+  }
+
+  const formattedDate = new Date(dateTime).toLocaleString("uk-UA", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  if (SERVER_URL.startsWith("ВСТАВ_")) {
+    status.textContent = "Спочатку налаштуй адресу Telegram-сервера.";
+    return;
+  }
+
+  sendBtn.disabled = true;
+  status.textContent = "Надсилаємо повідомлення... 💌";
+
+  try {
+    const response = await fetch(SERVER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        place,
+        dateTime: formattedDate
+      })
     });
-    btnNo.addEventListener('touchstart', (event) => {
-      event.preventDefault();
-      moveNoButton();
-    }, { passive: false });
 
-    function goToStep2() {
-      document.getElementById('step-1').style.display = 'none';
-      document.getElementById('step-2').style.display = 'block';
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || "Помилка надсилання");
     }
 
-    function toggleCustomPlace(value) {
-      document.getElementById('customPlaceInput').style.display =
-        value === 'custom' ? 'block' : 'none';
-    }
-
-    async function sendData() {
-      const placeSelect = document.getElementById('placeSelect').value;
-      const customPlace = document.getElementById('customPlace').value.trim();
-      const dateTime = document.getElementById('dateTime').value;
-
-      const finalPlace = placeSelect === 'custom' ? customPlace : placeSelect;
-
-      if (!finalPlace || !dateTime) {
-        result.textContent = 'Будь ласка, заповніть усі поля! 💗';
-        return;
-      }
-
-      if (placeSelect === 'custom' && !customPlace) {
-        result.textContent = 'Введіть своє місце побачення!';
-        return;
-      }
-
-      const dateObj = new Date(dateTime);
-
-      if (Number.isNaN(dateObj.getTime())) {
-        result.textContent = 'Перевірте дату та час!';
-        return;
-      }
-
-      if (dateObj.getTime() < Date.now()) {
-        result.textContent = 'Оберіть майбутню дату та час!';
-        return;
-      }
-
-      const formattedDate = dateObj.toLocaleString('uk-UA', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-
-      const messageText =
-        '🎉 Нова відповідь на запрошення!\n\n' +
-        '💖 Відповідь: ТАК!\n' +
-        '📅 Дата та час: ' + formattedDate + '\n' +
-        '📍 Місце: ' + finalPlace;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Надсилаю...';
-      result.textContent = '';
-
-      try {
-        const response = await fetch(
-          `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              chat_id: TELEGRAM_CHAT_ID,
-              text: messageText
-            })
-          }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok || !data.ok) {
-          console.error('Telegram API:', data);
-          result.textContent = 'Помилка Telegram. Переконайтеся, що ви натиснули /start у боті.';
-          return;
-        }
-
-        result.textContent = 'Ура! Повідомлення надіслано в Telegram! 💌';
-        submitBtn.textContent = 'Надіслано ❤️';
-
-      } catch (error) {
-        console.error('Помилка надсилання:', error);
-        result.textContent = 'Не вдалося з’єднатися з Telegram. Спробуйте ще раз.';
-      } finally {
-        if (submitBtn.textContent !== 'Надіслано ❤️') {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Спробувати ще раз 🚀';
-        }
-      }
-    }
-  </script>
+    status.textContent =
+      "Урааа! Повідомлення відправлено! 💗🦤";
+    sendBtn.textContent = "Відправлено 💌";
+  } catch (error) {
+    console.error(error);
+    status.textContent =
+      "Не вдалося надіслати 😢 Перевір налаштування сервера.";
+    sendBtn.disabled = false;
+  }
+});
+</script>
 </body>
 </html>
+```
