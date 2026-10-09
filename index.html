@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Пішли на побачення? ❤️</title>
+  <title>Запрошення на побачення 💌</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #ffe6e9;
+    }
+    body {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
+      padding: 20px;
       text-align: center;
     }
     .card {
@@ -20,162 +25,261 @@
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 90%;
+      max-width: 450px;
+      width: 100%;
+      position: relative;
     }
     h1 {
-      color: #ff4b6e;
+      color: #ff4b2b;
       font-size: 24px;
       margin-bottom: 15px;
     }
     p {
       color: #555;
       font-size: 16px;
+      margin-bottom: 25px;
+      min-height: 48px;
     }
-    .date-picker-box {
-      margin: 20px 0;
-    }
-    input[type="datetime-local"] {
-      padding: 10px;
-      font-size: 16px;
-      border: 2px solid #ff4b6e;
-      border-radius: 10px;
-      outline: none;
-      color: #333;
-    }
-    .btn-container {
+    .buttons {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 15px;
-      margin-top: 20px;
       position: relative;
-      min-height: 50px;
-      flex-wrap: wrap;
+      min-height: 80px;
     }
     button {
-      padding: 12px 25px;
-      font-size: 18px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
       border: none;
-      border-radius: 12px;
+      border-radius: 25px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    #yesBtn {
+    .btn-yes {
       background-color: #28a745;
       color: white;
-      font-weight: bold;
+      z-index: 10;
     }
-    #yesBtn:hover {
-      background-color: #218838;
-    }
-    #noBtn {
+    .btn-no {
       background-color: #dc3545;
       color: white;
+      position: absolute;
+    }
+    .form-group {
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      text-align: left;
+    }
+    label {
+      font-size: 14px;
       font-weight: bold;
+      color: #333;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+    }
+    select:focus, input:focus {
+      border-color: #ff4b2b;
+    }
+    .btn-submit {
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      color: white;
+      width: 100%;
+      margin-top: 10px;
     }
     .success-msg {
       display: none;
-      font-size: 20px;
-      color: #ff4b6e;
+      color: #28a745;
+      font-size: 18px;
       font-weight: bold;
-      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <div class="card" id="card">
-    <h1 id="title">Пішли на побачення? 🌹</h1>
-    <p id="subtitle">Обери зручний день та час:</p>
-
-    <div class="date-picker-box" id="dateBox">
-      <input type="datetime-local" id="dateTimeInput">
+<div class="card">
+  <!-- КРОК 1: Запрошення та кнопка, що втікає -->
+  <div id="step-1">
+    <h1>Підемо на побачення? 💌</h1>
+    <p id="phrase">Обери відповідь нижче 😉</p>
+    
+    <div class="buttons">
+      <button class="btn-yes" id="btnYes" onclick="goToStep2()">Так!</button>
+      <button class="btn-no" id="btnNo">Ні</button>
     </div>
-
-    <div class="btn-container" id="btnBox">
-      <button id="yesBtn" onclick="acceptDate()">ТАК! 🥰</button>
-      <button id="noBtn" onclick="handleNoClick()">Ні 😢</button>
-    </div>
-
-    <div class="success-msg" id="successMsg"></div>
   </div>
 
-  <script>
-    // Встановлюємо завтрашній день за замовчуванням
-    const dateInput = document.getElementById('dateTimeInput');
-    const now = new Date();
-    now.setDate(now.getDate() + 1);
-    now.setHours(19, 0, 0, 0);
-    dateInput.value = now.toISOString().slice(0, 16);
+  <!-- КРОК 2: Вибір місця, дати та часу -->
+  <div id="step-2" class="form-group">
+    <h1>Ура! 🎉 Куди та коли?</h1>
+    
+    <div>
+      <label for="place">Обери варіант відпочинку:</label>
+      <select id="place" onchange="toggleCustomPlace(this.value)">
+        <option value="🎱 Більярд">🎱 Більярд</option>
+        <option value="🚶‍♂️ Прогулятися">🚶‍♂️ Прогулятися</option>
+        <option value="🍕 Кафе та ресторан">🍕 Кафе та ресторан</option>
+        <option value="custom">✨ Свій варіант...</option>
+      </select>
+    </div>
 
-    // Смішні та переконливі відповіді при кліку на "Ні"
-    const noResponses = [
-      'Ти впевнена? 🥺',
-      'А може подумаєш? 🤔',
-      'Та ну, я ж цей сайт спеціально для цього робив! 💻',
-      'Не соромся, просто тисни ТАК! ✨',
-      'Додо, ну будь ласка, дай шанс! 🦤❤️',
-      'Кнопка "Ні" тут тільки для краси, тисни ТАК! 🌹',
-      'Я не здамся, поки ти не погодишся! 😜',
-      'Все, "Ні" більше не працює, вибір очевидний! 🚀'
-    ];
+    <div id="customPlaceGroup" style="display: none;">
+      <label for="customPlace">Твій варіант:</label>
+      <input type="text" id="customPlace" placeholder="Наприклад: Кіно, ковзанка...">
+    </div>
 
-    let noCount = 0;
-    let yesScale = 1;
+    <div>
+      <label for="dateTime">Обери дату та час:</label>
+      <input type="datetime-local" id="dateTime">
+    </div>
 
-    function handleNoClick() {
-      const noBtn = document.getElementById('noBtn');
-      const yesBtn = document.getElementById('yesBtn');
+    <button class="btn-submit" onclick="sendData()">Відправити 🚀</button>
+  </div>
 
-      // Змінюємо текст на кнопці "Ні"
-      noBtn.innerText = noResponses[noCount % noResponses.length];
-      noCount++;
+  <!-- КРОК 3: Повідомлення про успіх -->
+  <div id="step-3" class="success-msg">
+    <h2>Дякую за відповідь! 🥰</h2>
+    <p style="margin-top: 10px;">Я вже отримав сповіщення та готуюся до зустрічі! ✨</p>
+  </div>
+</div>
 
-      // Збільшуємо кнопку "Так"
-      yesScale += 0.25;
-      yesBtn.style.transform = `scale(${yesScale})`;
+<script>
+  // Конфігурація Telegram бота
+  const BOT_TOKEN = '8908941684:AAGP6pLR7T2QkGYy0gd1jn6iAkiQdRDkXe0';
+  const CHAT_ID = '8416117144';
+
+  // Смішні фрази при спробі натиснути "Ні"
+  const phrases = [
+    "Ти що, додо? 🦤",
+    "Та ти що, я ж спеціально для цього сайт писав! 💻",
+    "Додо, кнопка 'Ні' тут зламалася, тисни 'Так'! 😂",
+    "Ти що, реально додо? Натискай 'Так'! 😜",
+    "Ні-ні-ні, цей варіант не приймається! 🚫",
+    "Я буду збільшувати кнопку 'Так', поки ти не погодишся! 🚀",
+    "Ну ти й додо, кнопка 'Так' вже на пів екрану! 😉"
+  ];
+
+  let phraseIndex = 0;
+  let yesScale = 1;
+
+  const btnNo = document.getElementById('btnNo');
+  const btnYes = document.getElementById('btnYes');
+  const phraseText = document.getElementById('phrase');
+
+  // Початкове позиціонування кнопки "Ні"
+  btnNo.style.left = '60%';
+
+  // Функція втікання кнопки "Ні"
+  function moveNoButton() {
+    const card = document.querySelector('.card');
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = btnNo.getBoundingClientRect();
+
+    // Вираховуємо випадкові координати в межах картки
+    const maxLeft = cardRect.width - btnRect.width - 20;
+    const maxTop = cardRect.height - btnRect.height - 20;
+
+    const randomLeft = Math.floor(Math.random() * maxLeft);
+    const randomTop = Math.floor(Math.random() * maxTop);
+
+    btnNo.style.position = 'absolute';
+    btnNo.style.left = randomLeft + 'px';
+    btnNo.style.top = randomTop + 'px';
+
+    // Змінюємо текст
+    phraseText.innerText = phrases[phraseIndex];
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+
+    // Збільшуємо кнопку "Так"
+    yesScale += 0.25;
+    btnYes.style.transform = `scale(${yesScale})`;
+  }
+
+  // Події для втікання кнопки (для мишки та сенсорних екранів)
+  btnNo.addEventListener('mouseover', moveNoButton);
+  btnNo.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    moveNoButton();
+  });
+
+  // Перехід до форми вибору місця та часу
+  function goToStep2() {
+    document.getElementById('step-1').style.display = 'none';
+    document.getElementById('step-2').style.display = 'flex';
+  }
+
+  // Показуємо поле для власного варіанту
+  function toggleCustomPlace(val) {
+    const customGroup = document.getElementById('customPlaceGroup');
+    if (val === 'custom') {
+      customGroup.style.display = 'block';
+    } else {
+      customGroup.style.display = 'none';
+    }
+  }
+
+  // Відправка даних у Telegram
+  function sendData() {
+    const placeSelect = document.getElementById('place').value;
+    const customPlace = document.getElementById('customPlace').value;
+    const dateTime = document.getElementById('dateTime').value;
+
+    let finalPlace = placeSelect;
+    if (placeSelect === 'custom') {
+      finalPlace = customPlace ? `✨ Власний варіант: ${customPlace}` : '✨ Власний варіант (не вказано)';
     }
 
-    function acceptDate() {
-      const selectedDate = dateInput.value;
-      if (!selectedDate) {
-        alert('Будь ласка, обери дату та час!');
-        return;
+    if (!dateTime) {
+      alert('Будь ласка, обери дату та час!');
+      return;
+    }
+
+    // Форматування дати
+    const formattedDate = new Date(dateTime).toLocaleString('uk-UA', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const message = `🎉 **Нова відповідь на побачення!**\n\n📍 **Місце:** ${finalPlace}\n📅 **Дата та час:** ${formattedDate}`;
+
+    // Відправка через Telegram API
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+        parse_mode: 'Markdown'
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-3').style.display = 'block';
+      } else {
+        alert('Виникла помилка при відправці. Спробуйте ще раз.');
       }
-
-      const formattedDate = new Date(selectedDate).toLocaleString('uk-UA', {
-        dateStyle: 'full',
-        timeStyle: 'short'
-      });
-
-      document.getElementById('subtitle').style.display = 'none';
-      document.getElementById('dateBox').style.display = 'none';
-      document.getElementById('btnBox').style.display = 'none';
-
-      const successMsg = document.getElementById('successMsg');
-      successMsg.innerHTML = `Ура! Побачення заплановано на:<br><b>${formattedDate}</b> ❤️✨`;
-      successMsg.style.display = 'block';
-
-      sendTelegramNotification(formattedDate);
-    }
-
-    function sendTelegramNotification(dateText) {
-      const token = '8908941684:AAGP6pLR7T2QkGYy0gd1jn6iAkiQdRDkXe0';
-      const chatId = '8416117144';
-      const text = `🎉 Вона погодилася на побачення! ❤️\n\n📅 Обрана дата й час: ${dateText}`;
-
-      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: text
-        })
-      });
-    }
-  </script>
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Помилка мережі.');
+    });
+  }
+</script>
 
 </body>
 </html>
