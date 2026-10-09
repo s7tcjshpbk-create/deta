@@ -21,6 +21,7 @@
       align-items: center;
       padding: 20px;
       text-align: center;
+      overflow-x: hidden;
     }
 
     .card {
@@ -30,6 +31,7 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       max-width: 400px;
       width: 100%;
+      position: relative;
     }
 
     h1 {
@@ -50,7 +52,7 @@
       align-items: center;
       gap: 15px;
       flex-wrap: wrap;
-      min-height: 80px;
+      min-height: 120px;
     }
 
     button {
@@ -60,12 +62,13 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: transform 0.2s, background-color 0.2s;
+      transition: transform 0.2s ease, background-color 0.2s;
     }
 
     .btn-yes {
       background-color: #28a745;
       color: white;
+      z-index: 2;
     }
 
     .btn-no {
@@ -175,10 +178,11 @@
   </div>
 
   <script>
-    // Токен бота та Chat ID
+    // Налаштування Telegram
     const TELEGRAM_BOT_TOKEN = '8908941684:AAGP6pLR7T2QkGYy0gd1jn6iAkiQdRDkXe0';
     const TELEGRAM_CHAT_ID = '8416117144';
 
+    // Кумедні фрази про додо
     const phrases = [
       "Ти що, додо? 🦤",
       "Та ти що, я ж спеціально для цього сайт писав!",
@@ -201,13 +205,19 @@
       phraseIndex = (phraseIndex + 1) % phrases.length;
       btnNo.innerText = phrases[phraseIndex];
 
-      yesScale = Math.min(yesScale + 0.15, 2);
+      // Збільшуємо кнопку "Так" з кожним натисканням/наведенням на "Ні"
+      yesScale += 0.2;
+      if (yesScale > 2.5) yesScale = 2.5; // Щоб не розросталося занадто сильно
       btnYes.style.transform = `scale(${yesScale})`;
     }
 
+    // Події для спрацьовування кумедної анімації
     btnNo.addEventListener('mouseenter', moveNoButton);
-    btnNo.addEventListener('click', moveNoButton);
-    btnNo.addEventListener('touchstart', function (event) {
+    btnNo.addEventListener('click', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+    btnNo.addEventListener('touchstart', (event) => {
       event.preventDefault();
       moveNoButton();
     }, { passive: false });
