@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ти що, образилася? 😂</title>
+  <title>Ти що, образилась? 😂</title>
   <style>
     * {
       box-sizing: border-box;
@@ -38,16 +38,18 @@
       color: #ff3366;
       font-size: 2rem;
       margin-bottom: 10px;
+      transition: transform 0.2s ease;
     }
 
     p.subtitle {
       color: #555;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       margin-bottom: 30px;
-      min-height: 50px;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
+      line-height: 1.4;
     }
 
     .buttons-container {
@@ -59,45 +61,43 @@
       position: relative;
     }
 
-    button, .redirect-btn {
+    button {
       padding: 12px 28px;
       font-size: 1.2rem;
       font-weight: bold;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.2s ease;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      text-decoration: none;
-      display: inline-block;
     }
 
+    /* Кнопка ТАК - тікає */
     #btn-yes {
       background-color: #ff4757;
-      color: white;
-      transform-origin: center;
-    }
-
-    #btn-yes:hover {
-      background-color: #ff6b81;
-    }
-
-    #btn-no {
-      background-color: #2ed573;
       color: white;
       position: absolute;
       transition: all 0.15s ease-out;
     }
 
-    .redirect-btn {
-      background-color: #0088cc; /* Колір Telegram */
+    /* Кнопка НІ - звичайна, на яку можна клікати */
+    #btn-no {
+      background-color: #2ed573;
       color: white;
-      margin-top: 15px;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+
+    #btn-no:hover {
+      background-color: #26af5f;
+    }
+
+    #btn-no:active {
+      transform: scale(0.95);
     }
 
     .emoji {
       font-size: 4rem;
       margin-bottom: 10px;
+      transition: transform 0.3s ease;
     }
   </style>
 </head>
@@ -105,95 +105,64 @@
 
   <div class="card" id="main-card">
     <div class="emoji" id="main-emoji">🥺👉👈</div>
-    <h1 id="title">Ти що, образилась?</h1>
-    <p class="subtitle" id="status-text">Скажи чесно, тільки без цього вашого «все нормально»...</p>
+    <h1 id="title">Ти що, обиділась?</h1>
+    <p class="subtitle" id="status-text">Скажи чесно, ти на мене дуєшся?</p>
 
     <div class="buttons-container" id="btn-container">
-      <button id="btn-yes">Да 😭</button>
+      <button id="btn-yes">Так 😭</button>
       <button id="btn-no">Ні 😎</button>
-    </div>
-
-    <div id="redirect-container" style="display: none;">
-      <a id="bot-link" href="#" target="_blank" class="redirect-btn">Перейти в бот 🤖</a>
     </div>
   </div>
 
   <script>
-    // 🔗 ВСТАВТЕ СЮДИ ПОСИЛАННЯ НА ВАШОГО БОТА (Telegram / TikTok):
-    const BOT_URL = "https://t.me/your_bot_username"; // Змініть на своє посилання!
-
     const btnYes = document.getElementById('btn-yes');
     const btnNo = document.getElementById('btn-no');
     const statusText = document.getElementById('status-text');
     const title = document.getElementById('title');
     const mainEmoji = document.getElementById('main-emoji');
-    const btnContainer = document.getElementById('btn-container');
-    const redirectContainer = document.getElementById('redirect-container');
-    const botLink = document.getElementById('bot-link');
 
-    // Налаштовуємо посилання
-    botLink.href = BOT_URL;
-
-    // Смішні фрази при натисканні на "Да"
-    const yesPhrases = [
-      "Ти що, я ж пошутив! 😅",
-      "Ну це ж шутка була, ти чого! 🙈",
-      "Зачекай, кнопка зменшується, бачиш? 🤏",
-      "Ей, ну не дуйся! 🎈",
-      "Та я ж любя! 🥹",
-      "Все, переходимо миритись у бот! 😂"
+    // Набір смішних відповідей при кліку на "Ні"
+    const noPhrases = [
+      "А чому тоді кнопка «Так» від тебе тікає? 😂",
+      "Та ти точно обиділась, я ж бачу! 😜",
+      "Та це ж шутка була, ну ти чого! 🙈",
+      "Я ж любя, не дуйся! 🎈",
+      "Точно ні? А губки чого пантиш? 🥺",
+      "Ну слава богу! А то я вже думав купувати кілограм шоколадок 🍫",
+      "Все, раз «Ні», то з тебе посмішка! 😁"
     ];
 
-    let clickCount = 0;
-    let currentScale = 1;
+    const emojis = ["🥺👉👈", "😅", "🙈", "🎈", "🥹", "🍫", "❤️🎉"];
 
-    // Кнопка "Да" зменшується
-    btnYes.addEventListener('click', () => {
-      clickCount++;
-      currentScale -= 0.18; // Швидкість зменшення
+    let clickIndex = 0;
 
-      if (currentScale > 0.25) {
-        btnYes.style.transform = `scale(${currentScale})`;
-        
-        const phraseIndex = Math.min(clickCount - 1, yesPhrases.length - 1);
-        statusText.innerText = yesPhrases[phraseIndex];
-        
-        title.style.transform = `rotate(${Math.random() * 6 - 3}deg)`;
-      } else {
-        showVictoryScreen();
-      }
+    // Натискання на кнопку "Ні" змінює текст та емодзі
+    btnNo.addEventListener('click', () => {
+      statusText.innerText = noPhrases[clickIndex];
+      mainEmoji.innerText = emojis[clickIndex];
+      
+      // Легкий рух заголовка для ефекту
+      title.style.transform = `rotate(${Math.random() * 8 - 4}deg)`;
+
+      clickIndex = (clickIndex + 1) % noPhrases.length;
     });
 
-    // Кнопка "Ні" тікає
-    function moveNoButton() {
-      const maxX = 140;
-      const maxY = 90;
+    // Кнопка "Так" тікає від курсора або пальця
+    function moveYesButton() {
+      const maxX = 130;
+      const maxY = 80;
 
       const randomX = (Math.random() - 0.5) * maxX * 2;
       const randomY = (Math.random() - 0.5) * maxY * 2;
 
-      btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+      btnYes.style.transform = `translate(${randomX}px, ${randomY}px)`;
     }
 
-    btnNo.addEventListener('mouseover', moveNoButton);
-    btnNo.addEventListener('touchstart', (e) => {
+    btnYes.addEventListener('mouseover', moveYesButton);
+    btnYes.addEventListener('touchstart', (e) => {
       e.preventDefault();
-      moveNoButton();
+      moveYesButton();
     });
-
-    // Фінал + Перехід у бот
-    function showVictoryScreen() {
-      mainEmoji.innerText = "❤️🎉";
-      title.innerText = "Ура, мир!";
-      statusText.innerText = "Я ж казав, що це жарт! Переходимо в бот... 🚀";
-      btnContainer.style.display = 'none';
-      redirectContainer.style.display = 'block';
-
-      // Автоматичне перенаправлення через 1.5 секунди
-      setTimeout(() => {
-        window.location.href = BOT_URL;
-      }, 1500);
-    }
   </script>
 </body>
 </html>
