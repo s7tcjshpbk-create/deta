@@ -1,305 +1,199 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Запрошення на побачення 💌</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ти що, образилася? 😂</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
 
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-}
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
 
-body {
-  background: linear-gradient(135deg, #ff9a9e, #fecfef);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  text-align: center;
-}
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px 30px;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+      width: 90%;
+      position: relative;
+      backdrop-filter: blur(5px);
+    }
 
-.card {
-  background: white;
-  padding: 28px 22px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px #0002;
-  max-width: 420px;
-  width: 100%;
-  overflow: hidden;
-}
+    h1 {
+      color: #ff3366;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
 
-h1 {
-  color: #d63384;
-  margin-bottom: 15px;
-  font-size: 25px;
-}
+    p.subtitle {
+      color: #555;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-p {
-  color: #555;
-  font-size: 17px;
-  margin-bottom: 20px;
-}
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      min-height: 80px;
+      position: relative;
+    }
 
-.btn-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  min-height: 100px;
-}
+    button, .redirect-btn {
+      padding: 12px 28px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      display: inline-block;
+    }
 
-button {
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
+    #btn-yes {
+      background-color: #ff4757;
+      color: white;
+      transform-origin: center;
+    }
 
-.btn-yes {
-  background: #28a745;
-  color: white;
-  position: relative;
-  z-index: 2;
-  transition: transform .2s;
-}
+    #btn-yes:hover {
+      background-color: #ff6b81;
+    }
 
-.btn-no {
-  background: #dc3545;
-  color: white;
-  position: absolute;
-  left: 58%;
-  top: 25px;
-  white-space: nowrap;
-  z-index: 3;
-  transition: left .15s, top .15s, transform .15s;
-}
+    #btn-no {
+      background-color: #2ed573;
+      color: white;
+      position: absolute;
+      transition: all 0.15s ease-out;
+    }
 
-#funnyMessage {
-  min-height: 52px;
-  color: #d63384;
-  font-weight: bold;
-  font-size: 16px;
-  margin-top: 10px;
-}
+    .redirect-btn {
+      background-color: #0088cc; /* Колір Telegram */
+      color: white;
+      margin-top: 15px;
+    }
 
-.form-group {
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: bold;
-  color: #333;
-}
-
-select, input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 9px;
-  font-size: 16px;
-}
-
-.btn-submit {
-  background: #d63384;
-  color: white;
-  width: 100%;
-  margin-top: 5px;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-}
-
-#step-2 {
-  display: none;
-}
-
-#status {
-  margin-top: 15px;
-  font-size: 15px;
-  overflow-wrap: anywhere;
-  color: #d63384;
-}
-</style>
+    .emoji {
+      font-size: 4rem;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
-
 <body>
-<div class="card">
 
-  <div id="step-1">
-    <h1>Підемо на побачення? 🥺</h1>
-    <p>Я дуууже хочу провести з тобою час!</p>
+  <div class="card" id="main-card">
+    <div class="emoji" id="main-emoji">🥺👉👈</div>
+    <h1 id="title">Ти що, образилась?</h1>
+    <p class="subtitle" id="status-text">Скажи чесно, тільки без цього вашого «все нормально»...</p>
 
-    <div class="btn-container" id="btnContainer">
-      <button class="btn-yes" id="btnYes">Так! 🥰</button>
-      <button class="btn-no" id="btnNo">Ні 😢</button>
+    <div class="buttons-container" id="btn-container">
+      <button id="btn-yes">Да 😭</button>
+      <button id="btn-no">Ні 😎</button>
     </div>
 
-    <p id="funnyMessage" aria-live="polite">
-      Обирай відповідь дуже уважно 👀
-    </p>
+    <div id="redirect-container" style="display: none;">
+      <a id="bot-link" href="#" target="_blank" class="redirect-btn">Перейти в бот 🤖</a>
+    </div>
   </div>
 
-  <div id="step-2">
-    <h1>Урааа! 🎉</h1>
-    <p>Ну що, додо, куди й коли вирушаємо? 🦤</p>
+  <script>
+    // 🔗 ВСТАВТЕ СЮДИ ПОСИЛАННЯ НА ВАШОГО БОТА (Telegram / TikTok):
+    const BOT_URL = "https://t.me/your_bot_username"; // Змініть на своє посилання!
 
-    <div class="form-group">
-      <label for="placeSelect">Куди підемо?</label>
-      <select id="placeSelect">
-        <option value="Прогулянка">🌳 Прогулянка</option>
-        <option value="Більярд">🎱 Більярд</option>
-        <option value="Кафе">☕ Кафе</option>
-        <option value="Ресторан">🍝 Ресторан</option>
-        <option value="custom">💡 Моя пропозиція</option>
-      </select>
-    </div>
+    const btnYes = document.getElementById('btn-yes');
+    const btnNo = document.getElementById('btn-no');
+    const statusText = document.getElementById('status-text');
+    const title = document.getElementById('title');
+    const mainEmoji = document.getElementById('main-emoji');
+    const btnContainer = document.getElementById('btn-container');
+    const redirectContainer = document.getElementById('redirect-container');
+    const botLink = document.getElementById('bot-link');
 
-    <div class="form-group" id="customGroup" style="display:none">
-      <label for="customPlace">Твоя пропозиція</label>
-      <input id="customPlace" type="text" placeholder="Напиши, куди хочеш піти">
-    </div>
+    // Налаштовуємо посилання
+    botLink.href = BOT_URL;
 
-    <div class="form-group">
-      <label for="dateTime">Дата та час</label>
-      <input type="datetime-local" id="dateTime" required>
-    </div>
+    // Смішні фрази при натисканні на "Да"
+    const yesPhrases = [
+      "Ти що, я ж пошутив! 😅",
+      "Ну це ж шутка була, ти чого! 🙈",
+      "Зачекай, кнопка зменшується, бачиш? 🤏",
+      "Ей, ну не дуйся! 🎈",
+      "Та я ж любя! 🥹",
+      "Все, переходимо миритись у бот! 😂"
+    ];
 
-    <a id="sendBtn" class="btn-submit" href="#" target="_blank">
-      Підтвердити побачення 💌
-    </a>
+    let clickCount = 0;
+    let currentScale = 1;
 
-    <p id="status" aria-live="polite"></p>
-  </div>
+    // Кнопка "Да" зменшується
+    btnYes.addEventListener('click', () => {
+      clickCount++;
+      currentScale -= 0.18; // Швидкість зменшення
 
-</div>
-
-<script>
-  const BOT_USERNAME = 'dodo_dodo05n_bot';
-
-  const phrases = [
-    "Ти серйозно? Я навіть сайт для цього написав! 😭",
-    "Додо, ти зараз серйозно натискаєш «Ні»? 🦤",
-    "Кнопка на твоєму боці, але я на крок попереду 😈",
-    "Може, окуляри потрібні? Там же «Так»! 👀",
-    "Я витратив час на сайт, а ти так зі мною?!",
-    "Увага! Виявлено критичний рівень додо 🦤",
-    "Кнопка «Ні» йде у відпустку 😂",
-    "Твій вибір прийнято. Жартую, лови кнопку!",
-    "Навіть кнопка не хоче казати «Ні» 🤣",
-    "Додо.exe перестав відповідати...",
-    "Я це запам'ятаю. Особливо додо запам'ятаю 😭",
-    "Всесвіт натякає тобі натиснути «Так» 🌍"
-  ];
-
-  let attempts = 0;
-  let yesScale = 1;
-  let noScale = 1;
-
-  const btnNo = document.getElementById("btnNo");
-  const btnYes = document.getElementById("btnYes");
-  const container = document.getElementById("btnContainer");
-
-  function moveNoButton(event) {
-    if (event) event.preventDefault();
-
-    attempts++;
-
-    document.getElementById("funnyMessage").textContent =
-      phrases[(attempts - 1) % phrases.length];
-
-    noScale = Math.max(0.35, noScale - 0.07);
-    btnNo.style.transform = `scale(${noScale})`;
-
-    yesScale = Math.min(1.65, yesScale + 0.045);
-    btnYes.style.transform = `scale(${yesScale})`;
-
-    const maxX = Math.max(0, container.clientWidth - btnNo.offsetWidth);
-    const maxY = Math.max(0, container.clientHeight - btnNo.offsetHeight);
-
-    btnNo.style.left = Math.random() * maxX + "px";
-    btnNo.style.top = Math.random() * maxY + "px";
-  }
-
-  btnNo.addEventListener("pointerenter", moveNoButton);
-  btnNo.addEventListener("touchstart", moveNoButton, {
-    passive: false
-  });
-
-  btnYes.addEventListener("click", () => {
-    document.getElementById("step-1").style.display = "none";
-    document.getElementById("step-2").style.display = "block";
-  });
-
-  document.getElementById("placeSelect").addEventListener("change", e => {
-    document.getElementById("customGroup").style.display =
-      e.target.value === "custom" ? "block" : "none";
-  });
-
-  document.getElementById("sendBtn").addEventListener("click", (e) => {
-    const select = document.getElementById("placeSelect");
-    const custom = document.getElementById("customPlace").value.trim();
-    const dateTime = document.getElementById("dateTime").value;
-    const status = document.getElementById("status");
-
-    const place = select.value === "custom" ? custom : select.value;
-
-    if (!place || !dateTime) {
-      e.preventDefault();
-      status.textContent = "Обери місце та дату з часом 🥺";
-      return;
-    }
-
-    if (select.value === "custom" && !custom) {
-      e.preventDefault();
-      status.textContent = "Напиши свою пропозицію 💡";
-      return;
-    }
-
-    const dateObj = new Date(dateTime);
-
-    if (Number.isNaN(dateObj.getTime())) {
-      e.preventDefault();
-      status.textContent = "Перевір правильність дати та часу!";
-      return;
-    }
-
-    if (dateObj.getTime() < Date.now()) {
-      e.preventDefault();
-      status.textContent = "Ця дата вже в минулому 😅 Обери майбутню!";
-      return;
-    }
-
-    const formattedDate = dateObj.toLocaleString("uk-UA", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+      if (currentScale > 0.25) {
+        btnYes.style.transform = `scale(${currentScale})`;
+        
+        const phraseIndex = Math.min(clickCount - 1, yesPhrases.length - 1);
+        statusText.innerText = yesPhrases[phraseIndex];
+        
+        title.style.transform = `rotate(${Math.random() * 6 - 3}deg)`;
+      } else {
+        showVictoryScreen();
+      }
     });
 
-    const messageText = 
-      `💌 НОВА ВІДПОВІДЬ НА ЗАПРОШЕННЯ!\n\n` +
-      `🎉 Погодження на побачення!\n` +
-      `📍 Місце: ${place}\n` +
-      `📅 Дата та час: ${formattedDate}`;
+    // Кнопка "Ні" тікає
+    function moveNoButton() {
+      const maxX = 140;
+      const maxY = 90;
 
-    // Формуємо посилання на Telegram з готовим текстом
-    const telegramUrl = `https://t.me/${BOT_USERNAME}?text=` + encodeURIComponent(messageText);
-    document.getElementById("sendBtn").href = telegramUrl;
-    
-    status.textContent = "Відкриваємо Telegram... Натисніть «Надіслати» 💌";
-  });
-</script>
+      const randomX = (Math.random() - 0.5) * maxX * 2;
+      const randomY = (Math.random() - 0.5) * maxY * 2;
+
+      btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    btnNo.addEventListener('mouseover', moveNoButton);
+    btnNo.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    // Фінал + Перехід у бот
+    function showVictoryScreen() {
+      mainEmoji.innerText = "❤️🎉";
+      title.innerText = "Ура, мир!";
+      statusText.innerText = "Я ж казав, що це жарт! Переходимо в бот... 🚀";
+      btnContainer.style.display = 'none';
+      redirectContainer.style.display = 'block';
+
+      // Автоматичне перенаправлення через 1.5 секунди
+      setTimeout(() => {
+        window.location.href = BOT_URL;
+      }, 1500);
+    }
+  </script>
 </body>
 </html>
